@@ -7,11 +7,13 @@ fetch("http://localhost:4000/api/users")
     })
     .then(usersApi => {
 
-    usersApi.forEach(user => {
-        users.push(user);
+        usersApi.forEach(user => {
+            users.push(user);
+        })
     })
-    .then(function (usersArray) {
-        return usersArray.map(function (u) {
+    .then(function () {
+
+        let htmlMap = users.map(function (u) {
             return `<tr>
                 <td>${u.id}</td>
                 <td>${u.name}</td>
@@ -20,7 +22,14 @@ fetch("http://localhost:4000/api/users")
                 <td>${u.phone}</td>
             </tr>`
         })
-    })
-})
 
-console.log(users);
+        return htmlMap;
+    })
+    .then(function (htmlMap) {
+
+        const tableUsers = document.getElementById("tableBodyUsers");
+
+        tableUsers.innerHTML = htmlMap.join("");
+
+    })
+
