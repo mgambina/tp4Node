@@ -17,8 +17,8 @@ fetch("http://localhost:4000/api/users")
             return `<tr>
                 <td>${u.id}</td>
                 <td>${u.name}</td>
-                <td>${u.lastname}</td>
                 <td>${u.email}</td>
+                <td>${u.address}</td>
                 <td>${u.phone}</td>
             </tr>`
         })
@@ -33,3 +33,25 @@ fetch("http://localhost:4000/api/users")
 
     })
 
+document.getElementById("btnAddUser").onclick = function () {
+    const name = document.getElementById("exampleInputName").value;
+    const email = document.getElementById("exampleInputEmail").value;
+    const address = document.getElementById("exampleInputAddress").value;
+    const phone = document.getElementById("exampleInputPhone").value;
+
+    const newUser = {
+        name: name,
+        email: email,
+        address: address,
+        phone: parseInt(phone)
+    }
+
+    fetch(`http://localhost:4000/api/users`, {
+        method: "POST",
+        body: JSON.stringify(newUser),
+        headers: {
+            "Content-Type": "application/json"
+        }
+
+    })
+}
