@@ -5,8 +5,8 @@ const cors = require("cors");
 
 const users = [
     {id: 1, name: "Bruce Wayne", email: "bruce@wayneenterpreises.com", address:"Gotham City", phone: 08009991111},
-    {id: 2, name: "Harry Potter", email: "harry.potter@howagarts.com", address:"Howarts", phone: 08009992222},
-    {id: 3, name: "Hermione Granger", email: "hermione.granger@howagarts.com", address:"Howarts", phone: 08009993333},
+    {id: 2, name: "Harry Potter", email: "harry.potter@hogwagarts.com", address:"Hogwarts", phone: 08009992222},
+    {id: 3, name: "Hermione Granger", email: "hermione.granger@hogwagarts.com", address:"Hogwarts", phone: 08009993333},
 
 ]
 
@@ -27,19 +27,52 @@ app.get("/api/users", function (req, res) {
 });
 
 
+
+function validate (newUserInfo) {
+
+    let resultValidation = {
+        valid: true,
+        message: ""
+    }
+
+    if(newUserInfo.name.length > 30) {
+        resultValidation.valid = false;
+        resultValidation.message = resultValidation.message.concat("Invalid name length");
+    } 
+
+    const expression = /\S+@\S+/
+    if(expression.test(String(newUserInfo.email).toLowerCase())) {
+
+    } else {
+        resultValidation.valid = false;
+        resultValidation.message = resultValidation.message.concat("Invalid email");
+        
+    }
+
+    if (typeof(newUserInfo.phone)!= "number") {
+        resultValidation.valid = false;
+        resultValidation.message = resultValidation.message.concat("Phone should be only numbers");
+    }
+
+    return resultValidation;
+}
+
 app.post("/api/users", function (req, res) {
 
     const newUser = req.body;
 
-    newUser.id = ++ID;
+    let resultValidation = validate(newUser); 
+
+    if (!resultValidation.valid) {
+        return res.status(400).json({message: resultValidation.message});
+
+    } else {
+        newUser.id = ++ID;
     
-    users.push(newUser);
-    // if (!nuevoTodo.texto || nuevoTodo.texto.trim().length === 0) {
-    //     //si quiero cortar la ejecucion porque no esta bien uso un return ademas de un res par avisarle al usuario
-    //     return res.status(400).send("salió todo mal");
-    // }
-  
-    res.json(newUser);
+        users.push(newUser);
+       
+        res.json(newUser);
+    }
 
     console.log(users);
 
