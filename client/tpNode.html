@@ -35,11 +35,11 @@
         <div class="main">
             <div class="row">
                 <div class="col-4 filter">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Filter..." aria-label="Search">
+                    <input id="input" class="form-control mr-sm-2" type="search" onkeyup="filter()" placeholder="Filter..." aria-label="Search">
                 </div>
             </div>
             <div class="row">
-                <table class="table">
+                <table class="table" id="table">
                     <thead>
                         <tr>
                             <th scope="col">checkbox</th>

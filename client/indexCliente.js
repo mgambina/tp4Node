@@ -1,6 +1,3 @@
-//aca van todos los fetch
-let users = [];
-
 function createUser(u) {
     return `<tr>
         <td>${u.id}</td>
@@ -17,26 +14,8 @@ fetch("http://localhost:4000/api/users")
         return res.json();
     })
     .then(usersApi => {
-
-        usersApi.forEach(user => {
-            users.push(user);
-        })
-    })
-    .then(function () {
-
-        let htmlMap = users.map(function (u) {
-            return createUser(u)
-        })
-
-        return htmlMap;
-    })
-    .then(function (htmlMap) {
-
-        const tableUsers = document.getElementById("tableBodyUsers");
-
-        tableUsers.innerHTML = htmlMap.join("");
-
-    })
+        createUsersTable(usersApi);
+    });
 
 function validate(newUserInfo) {
 
@@ -102,7 +81,7 @@ document.getElementById("btnAddUser").onclick = function () {
 
                 const formUsers = document.getElementById("formUsers");
                 formUsers.reset();
-                                
+
                 $('#exampleModal').modal('hide');
         
 
@@ -114,3 +93,32 @@ document.getElementById("btnAddUser").onclick = function () {
 
 }
 
+function filter () {
+    var input = document.getElementById("input");
+
+    fetch(`http://localhost:4000/api/users?search=${input.value}`)
+    .then(function (res) {
+        return res.json();
+    })
+    .then(usersApi => {
+        createUsersTable(usersApi);
+    });
+
+}
+
+function createUsersTable(usersJson){
+
+    users = [];
+    usersJson.forEach(user => {
+        users.push(user);
+    })
+
+    let htmlMap = users.map(function (u) {
+        return createUser(u)
+    })
+
+    const tableUsers = document.getElementById("tableBodyUsers");
+
+    tableUsers.innerHTML = htmlMap.join("");
+        
+}
