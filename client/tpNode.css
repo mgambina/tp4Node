@@ -31,3 +31,14 @@ th {
     font-family: 'Varela Round', sans-serif;
     font-size: 13px;
 }
+
+#btnEditRecord {
+    color: #ffc107;
+    border: none
+}
+
+#btnDeleteRecord {
+    color:#f44336;
+    border: none
+}
+

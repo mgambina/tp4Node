@@ -1,6 +1,6 @@
 function createUser(u) {
     return `<tr id="row${u.id}">
-        <td>${u.id}</td>
+        <td id="row${u.id}" class="checkbox"><label><input type="checkbox" value=""></label></td>
         <td class="userName">${u.name}</td>
         <td class="userEmail">${u.email}</td>
         <td class="userAddress">${u.address}</td>
