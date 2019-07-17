@@ -117,12 +117,13 @@ app.delete("/api/users/:id", function (req, res) {
 app.put("/api/users/:id", function (req, res){
     //para obtener el id de la tarea a editar
     const userId = req.params.id;
-    const userEditado = req.body; //pueden no llegar todas las propiedades del objeto
+    const userEditado = req.body; 
 
-    //incluyo la misma validacion anterior
-    // if (!todoEditado.texto || todoEditado.texto.trim().length === 0) {
-    //     return res.status(400).send("salió todo mal");
-    // }
+    let resultValidation = validate(userEditado);
+
+    if (!resultValidation.valid) {
+        return res.status(400).json({ message: resultValidation.message });
+    }
    
     users.forEach(function (user) {
         if(userId == user.id) {
