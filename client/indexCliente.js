@@ -1,10 +1,16 @@
 function createUser(u) {
-    return `<tr>
+    return `<tr id="row${u.id}">
         <td>${u.id}</td>
-        <td>${u.name}</td>
-        <td>${u.email}</td>
-        <td>${u.address}</td>
-        <td>${u.phone}</td>
+        <td class="userName">${u.name}</td>
+        <td class="userEmail">${u.email}</td>
+        <td class="userAddress">${u.address}</td>
+        <td class="userPhone">${u.phone}</td>
+        <td>
+            <div id="icons">
+            <button id="btnEditRecord" onclick="modalEditar(${u.id}, this)"><i class="material-icons" title="Edit">&#xE254;</i></button>
+            <button id="btnDeleteRecord" onclick="modalEliminar(${u.id}, this)"><i class="material-icons" title="Delete">&#xE872;</i></button>
+            </div>
+        </td>
     </tr>`
 
 }
@@ -41,6 +47,16 @@ function validate(newUserInfo) {
     return resultValidationClient;
 }
 
+document.getElementById("btnNewUser").onclick = function () {
+    $('#exampleModal').modal('show');
+    const botonAddEditarModal = document.getElementById("btnEditedUser");
+    const botonAddUserModal = document.getElementById("btnAddUser");
+
+    botonAddUserModal.classList.remove("d-none");
+    botonAddEditarModal.classList.add("d-none");
+}
+
+
 document.getElementById("btnAddUser").onclick = function () {
     const name = document.getElementById("exampleInputName").value;
     const email = document.getElementById("exampleInputEmail").value;
@@ -73,7 +89,7 @@ document.getElementById("btnAddUser").onclick = function () {
             if (!resultadoPost) {
                 alert(jsonServer.message)
             }
-            else {                
+            else {
                 const userHtml = createUser(jsonServer);
                 const tableUsers = document.getElementById("tableBodyUsers");
 
@@ -83,7 +99,7 @@ document.getElementById("btnAddUser").onclick = function () {
                 formUsers.reset();
 
                 $('#exampleModal').modal('hide');
-        
+
 
             }
         })
@@ -93,20 +109,115 @@ document.getElementById("btnAddUser").onclick = function () {
 
 }
 
-function filter () {
+function modalEditar(id, button) {
+
+     users.forEach(user => {
+       if (user.id === id) {
+
+            $('#exampleModal').modal('show');
+
+            //para ver la info que estaba cargada en ese usuario
+            document.getElementById("exampleInputName").value = user.name;
+            document.getElementById("exampleInputEmail").value = user.email;
+            document.getElementById("exampleInputAddress").value = user.address;
+            document.getElementById("exampleInputPhone").value = user.phone;
+
+            const botonAddEditarModal = document.getElementById("btnEditedUser");
+            const botonAddUserModal = document.getElementById("btnAddUser");
+
+            botonAddEditarModal.classList.remove("d-none");
+            botonAddUserModal.classList.add("d-none");
+
+
+            botonAddEditarModal.onclick = function () {
+
+                //cambia los valores
+                const name = document.getElementById("exampleInputName").value;
+                const email = document.getElementById("exampleInputEmail").value;
+                const address = document.getElementById("exampleInputAddress").value;
+                const phone = document.getElementById("exampleInputPhone").value;
+
+
+                const user = {
+                    name: name,
+                    email: email,
+                    address: address,
+                    phone: phone,
+                };
+
+                fetch(`http://localhost:4000/api/users/${id}`, {
+                    method: "PUT",
+                    body: JSON.stringify(user),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+
+                        document.querySelector(`#row${id} td.userName`).innerText = user.name;
+                        document.querySelector(`#row${id} td.userEmail`).innerText = user.email;
+                        document.querySelector(`#row${id} td.userAddress`).innerText = user.address;
+                        document.querySelector(`#row${id} td.userPhone`).innerText = user.phone;
+
+                        const formUsers = document.getElementById("formUsers");
+                        formUsers.reset();
+
+                        $('#exampleModal').modal('hide');
+                    })
+
+    
+            }
+
+
+        }
+
+    })
+
+ }
+
+
+function modalEliminar(id, button) {
+
+    users.forEach(user => {
+        if (user.id === id) {
+
+            $('#modalEliminar').modal('show');
+
+            const botonDeleteModal = document.getElementById("btnDeleteModal");
+
+            botonDeleteModal.onclick = function () {
+
+                fetch(`http://localhost:4000/api/users/${id}`, {
+                    //el metodo delete no tiene body
+                    method: "DELETE",
+                }).then(res => {
+                    document.getElementById(`row${id}`).remove();
+                })
+
+                $('#modalEliminar').modal('hide');
+
+            }
+
+        }
+    })
+}
+
+
+function filter() {
     var input = document.getElementById("input");
 
     fetch(`http://localhost:4000/api/users?search=${input.value}`)
-    .then(function (res) {
-        return res.json();
-    })
-    .then(usersApi => {
-        createUsersTable(usersApi);
-    });
+        .then(function (res) {
+            return res.json();
+        })
+        .then(usersApi => {
+            createUsersTable(usersApi);
+        });
 
 }
 
-function createUsersTable(usersJson){
+function createUsersTable(usersJson) {
 
     users = [];
     usersJson.forEach(user => {
@@ -120,5 +231,5 @@ function createUsersTable(usersJson){
     const tableUsers = document.getElementById("tableBodyUsers");
 
     tableUsers.innerHTML = htmlMap.join("");
-        
+
 }

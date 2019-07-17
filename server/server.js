@@ -98,6 +98,42 @@ app.post("/api/users", function (req, res) {
 
 });
 
+app.delete("/api/users/:id", function (req, res) {
 
+    const id = parseInt(req.params.id)
+
+     for (let i =0; i < users.length; i++) {
+
+        if (users[i].id === id) {
+           
+            users.splice(i, 1);
+        }
+    }
+
+    res.json(users)
+
+});
+
+app.put("/api/users/:id", function (req, res){
+    //para obtener el id de la tarea a editar
+    const userId = req.params.id;
+    const userEditado = req.body; //pueden no llegar todas las propiedades del objeto
+
+    //incluyo la misma validacion anterior
+    // if (!todoEditado.texto || todoEditado.texto.trim().length === 0) {
+    //     return res.status(400).send("salió todo mal");
+    // }
+   
+    users.forEach(function (user) {
+        if(userId == user.id) {
+           user.name = userEditado.name;
+           user.address = userEditado.address;
+           user.email = userEditado.email;
+           user.phone = userEditado.phone;
+           //una vez que editamos lo que queriamos editar, nos vamos y devolvemos el objeto editado
+           return res.json(user)
+        }
+    })
+})
 
 app.listen(4000);
