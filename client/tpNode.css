@@ -41,14 +41,15 @@ th {
 
 #btnEditRecord {
     color: #ffc107;
-    border: none
+    border: none;
 }
 
 #btnDeleteRecord {
     color:#f44336;
-    border: none
+    border: none;
 }
 
 .modal-footer {
     background-color: #ecf0f1;
 }
+

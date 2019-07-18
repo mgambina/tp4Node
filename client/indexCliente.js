@@ -1,6 +1,6 @@
 function createUser(u) {
     return `<tr id="row${u.id}">
-        <td id="row${u.id}" class="checkbox"><label><input type="checkbox" value=""></label></td>
+        <td id="checkboxRow${u.id}" class="checkbox checkboxRow"><label><input type="checkbox" value=""></label></td>
         <td class="userName">${u.name}</td>
         <td class="userEmail">${u.email}</td>
         <td class="userAddress">${u.address}</td>
@@ -199,6 +199,15 @@ function modalEliminar(id, button) {
 
             }
 
+            const botonDeleteCancelModal = document.getElementById("btnCancelModal");
+
+
+            botonDeleteCancelModal.onclick = function () {
+
+                $('#modalEliminar').modal('hide');
+
+            }
+
         }
     })
 }
@@ -231,5 +240,22 @@ function createUsersTable(usersJson) {
     const tableUsers = document.getElementById("tableBodyUsers");
 
     tableUsers.innerHTML = htmlMap.join("");
+
+}
+
+document.getElementById("checkboxHeader").onclick = function () {
+
+    const checkboxHeader = document.getElementById("checkboxHeader");
+    const checkboxTr = document.querySelectorAll("tr td.checkbox.checkboxRow input");
+
+    checkboxTr.forEach(checkbox => {
+
+        if (checkboxHeader.checked === true) {
+            checkbox.checked = true;
+        } else {
+            checkbox.checked = false;
+        }
+    
+    })
 
 }
