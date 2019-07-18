@@ -53,3 +53,12 @@ th {
     background-color: #ecf0f1;
 }
 
+span {
+    padding: 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+#plus {
+    float: left
+}
