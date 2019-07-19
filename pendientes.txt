@@ -1,0 +1,5 @@
+1) Agregar validaciones de los campos cuando se edita del lado del cliente
+
+2) Cuando sea crea un employee nuevo, hay que refrescar para poder editarlo o borrarlo - fix
+
+3) Error en validaciones lado cliente, solo dice invalid email
